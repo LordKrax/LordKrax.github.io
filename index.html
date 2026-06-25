@@ -25,6 +25,7 @@ body {
     margin-top: 80px;
     border: 3px solid #00f0ff;
     box-shadow: 0 0 20px #00f0ff;
+    object-fit: cover;
 }
 
 /* NAME */
@@ -80,8 +81,8 @@ a:hover {
 
 <body>
 
-<!-- PFP from GitHub -->
-<img class="pfp" src="https://github.com/LordKrax" alt="pfp">
+<!-- PFP FIXED -->
+<img class="pfp" src="https://github.com/LordKrax.png" alt="pfp">
 
 <h1>LordKrax</h1>
 
@@ -97,7 +98,8 @@ a:hover {
 <button id="musicBtn">▶ Play Music</button>
 
 <audio id="music" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/10/16/audio_c8b6c3b8c6.mp3?filename=cyberpunk-moonlight-ambient-114199.mp3" type="audio/mp3">
+    <!-- working test music -->
+    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kai_Engel/Impulses/Kai_Engel_-_07_-_Moonlight_Reprise.mp3" type="audio/mp3">
 </audio>
 
 <script>
@@ -118,13 +120,17 @@ typing();
 const music = document.getElementById("music");
 const btn = document.getElementById("musicBtn");
 
-btn.onclick = () => {
-    if (music.paused) {
-        music.play();
-        btn.innerText = "⏸ Pause Music";
-    } else {
-        music.pause();
-        btn.innerText = "▶ Play Music";
+btn.onclick = async () => {
+    try {
+        if (music.paused) {
+            await music.play();
+            btn.innerText = "⏸ Pause Music";
+        } else {
+            music.pause();
+            btn.innerText = "▶ Play Music";
+        }
+    } catch (e) {
+        alert("اضغط مرة ثانية لتشغيل الموسيقى");
     }
 };
 </script>
