@@ -3,304 +3,450 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LordKrax OS v2</title>
+<title>LordKrax | Developer</title>
 
 <style>
-/* نفس الـ styles الأساسية مع إضافات */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap');
 
-body {
+* {
     margin: 0;
-    font-family: monospace;
-    background: black;
-    color: #00f0ff;
-    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-#login {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black;
+body {
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(circle at 50% 0%, #0a0a1a, #000000);
+    color: #ffffff;
+    text-align: center;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    z-index: 999;
+    overflow: hidden;
+    position: relative;
 }
 
-input, button {
-    padding: 10px;
-    margin: 5px;
-    background: transparent;
-    border: 1px solid #00f0ff;
-    color: #00f0ff;
+/* ✅ خلفية متحركة (خطوط سايبر) */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.03) 2px, rgba(0, 240, 255, 0.03) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0, 240, 255, 0.03) 2px, rgba(0, 240, 255, 0.03) 4px);
+    pointer-events: none;
+    z-index: 0;
 }
 
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #00f0ff;
+/* ✅ الصورة الرمزية */
+.pfp {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #00f0ff;
+    box-shadow: 0 0 30px #00f0ff, 0 0 60px rgba(0, 240, 255, 0.3);
+    transition: 0.5s ease;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+    animation: glowPulse 2s infinite alternate;
 }
 
-.nav {
-    display: flex;
-    gap: 10px;
+.pfp:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 50px #00f0ff, 0 0 100px rgba(0, 240, 255, 0.5);
 }
 
-.page {
-    display: none;
-    padding: 20px;
-    height: 80vh;
-    overflow-y: auto;
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 20px #00f0ff, 0 0 40px rgba(0, 240, 255, 0.2); }
+    100% { box-shadow: 0 0 40px #00f0ff, 0 0 80px rgba(0, 240, 255, 0.4); }
 }
 
-.active {
-    display: block;
+/* ✅ الاسم */
+h1 {
+    margin-top: 25px;
+    font-size: 48px;
+    font-weight: 700;
+    text-shadow: 0 0 20px #00f0ff, 0 0 40px rgba(0, 240, 255, 0.3);
+    letter-spacing: 4px;
+    position: relative;
+    z-index: 1;
 }
 
-#terminal, #chatBox {
-    border: 1px solid #00f0ff;
-    height: 200px;
-    overflow-y: auto;
-    padding: 10px;
-    background: #0a0a0a;
+/* ✅ النص المتغير */
+.typing {
+    font-size: 18px;
+    color: #aac;
+    margin-top: 12px;
+    height: 30px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-/* تحسين للشاشات الصغيرة */
-@media (max-width: 768px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* تأثير وميض */
-.blink {
-    animation: blink 1s infinite;
+.typing::after {
+    content: '|';
+    animation: blink 0.8s infinite;
 }
 
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
 }
+
+/* ✅ الأزرار */
+.links {
+    margin-top: 35px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.links a {
+    display: inline-block;
+    padding: 12px 30px;
+    border: 1.5px solid #00f0ff;
+    color: #00f0ff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: 0.3s ease;
+    background: rgba(0, 240, 255, 0.05);
+    backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ✅ تأثير الأزرار */
+.links a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.links a:hover::before {
+    left: 100%;
+}
+
+.links a:hover {
+    background: #00f0ff;
+    color: #000;
+    box-shadow: 0 0 30px #00f0ff, 0 0 60px rgba(0, 240, 255, 0.3);
+    transform: translateY(-3px);
+}
+
+/* ✅ زر الموسيقى */
+#musicBtn {
+    margin-top: 25px;
+    padding: 12px 35px;
+    border: 1.5px solid #ff00ff;
+    background: rgba(255, 0, 255, 0.05);
+    color: #ff00ff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+#musicBtn:hover {
+    background: #ff00ff;
+    color: #000;
+    box-shadow: 0 0 30px #ff00ff, 0 0 60px rgba(255, 0, 255, 0.3);
+    transform: translateY(-3px);
+}
+
+/* ✅ عداد الزوار */
+.visitor {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #556;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ✅ شعار في الأسفل */
+.footer {
+    position: fixed;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    color: #334;
+    letter-spacing: 3px;
+    z-index: 1;
+}
+
+/* ✅ توافق الموبايل */
+@media (max-width: 600px) {
+    .pfp {
+        width: 110px;
+        height: 110px;
+        margin-top: 40px;
+    }
+
+    h1 {
+        font-size: 30px;
+        letter-spacing: 2px;
+    }
+
+    .typing {
+        font-size: 14px;
+        padding: 0 10px;
+    }
+
+    .links a {
+        padding: 10px 20px;
+        font-size: 12px;
+        margin: 5px;
+    }
+
+    #musicBtn {
+        padding: 10px 25px;
+        font-size: 12px;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-    <h2>⚡ LOGIN OS</h2>
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="login()">Enter</button>
-    <p style="color:gray;font-size:12px;">(أي اسم وكلمة مرور)</p>
+<!-- ✅ الصورة الرمزية (استخدم صورتك الخاصة) -->
+<img class="pfp" src="https://avatars.githubusercontent.com/u/123456789?v=4" alt="LordKrax">
+
+<!-- ✅ الاسم -->
+<h1>LordKrax</h1>
+
+<!-- ✅ النص المتحرك -->
+<div class="typing" id="typing"></div>
+
+<!-- ✅ الروابط (تم تعديلها) -->
+<div class="links">
+    <a href="https://github.com/LordKrax" target="_blank" title="GitHub">
+        <i>⌨️</i> GitHub
+    </a>
+    <a href="https://discord.com/users/752438182343344128" target="_blank" title="Discord">
+        <i>🎮</i> Discord
+    </a>
+    <a href="#projects" onclick="showProjects()" title="Projects">
+        <i>📁</i> Projects
+    </a>
+    <a href="https://youtube.com/@YourChannel" target="_blank" title="YouTube">
+        <i>📺</i> YouTube
+    </a>
 </div>
 
-<!-- TOPBAR -->
-<div class="topbar">
-    <div>⚡ LordKrax OS</div>
-    <div class="nav">
-        <button onclick="openPage('home')">Home</button>
-        <button onclick="openPage('projects')">Projects</button>
-        <button onclick="openPage('settings')">Settings</button>
-        <button onclick="openPage('about')">About</button>
-    </div>
-</div>
+<!-- ✅ زر الموسيقى -->
+<button id="musicBtn">▶ Play Music</button>
 
-<!-- HOME -->
-<div id="home" class="page active">
-    <div class="grid">
-        <div>
-            <h3>🖥️ Terminal</h3>
-            <div id="terminal"></div>
-            <input id="cmd" placeholder="اكتب أمراً..." onkeydown="cmdEnter(event)">
-        </div>
-        <div>
-            <h3>🤖 Chat AI</h3>
-            <div id="chatBox"></div>
-            <input id="chatInput" placeholder="اسألني..." onkeydown="chatEnter(event)">
-        </div>
-    </div>
-</div>
+<!-- ✅ عداد الزوار -->
+<div class="visitor">👁️ Visitors: <span id="visitorCount">0</span></div>
 
-<!-- PROJECTS -->
-<div id="projects" class="page">
-    <h2>📁 Projects</h2>
-    <ul>
-        <li>🤖 Discord Bots</li>
-        <li>⚙️ Automation Tools</li>
-        <li>🚗 FiveM Scripts</li>
-        <li>🌐 Web Apps</li>
-    </ul>
-</div>
+<!-- ✅ تذييل -->
+<div class="footer">✦ LORDKRAX OS ✦</div>
 
-<!-- SETTINGS -->
-<div id="settings" class="page">
-    <h2>⚙️ Settings</h2>
-    <button onclick="toggleSound()">🔊 Toggle Sound</button>
-    <button onclick="clearStorage()">🗑️ Clear Data</button>
-    <p id="statusSound">Sound: ON</p>
-</div>
-
-<!-- ABOUT -->
-<div id="about" class="page">
-    <h2>ℹ️ About</h2>
-    <p>LordKrax OS - Developer Dashboard v2</p>
-    <p>🛠️ Built with ❤️ using HTML, CSS, JS</p>
-    <p>📊 عدد الزيارات: <span id="visitCount"></span></p>
-</div>
+<!-- ✅ الصوت (تم تغيير المصدر ليعمل) -->
+<audio id="music" loop preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
 <script>
+// ============================================
+// 1. TYPING EFFECT (محسّن)
+// ============================================
+const textLines = [
+    "Discord Bots • Automation • FiveM Developer",
+    "⚡ Cyberpunk • Code • Creativity",
+    "🚀 Building the future, one line at a time"
+];
 
-/* ===== LOGIN ===== */
-function login(){
-    document.getElementById("login").style.display = "none";
-    playSound();
-    // عرض رسالة ترحيب في التيرمينال
-    terminal.innerHTML += "> Welcome to LordKrax OS 🚀<br>";
-    terminal.innerHTML += "> اكتب 'help' لمعرفة الأوامر<br>";
-}
+let lineIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+const typingElement = document.getElementById("typing");
 
-/* ===== NAVIGATION ===== */
-function openPage(id){
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    playSound();
-}
-
-/* ===== TERMINAL ===== */
-let terminal = document.getElementById("terminal");
-
-function cmdEnter(e){
-    if(e.key === "Enter"){
-        let val = e.target.value.trim();
-        if(!val) return;
-
-        terminal.innerHTML += "> " + val + "<br>";
-
-        // معالجة الأوامر
-        switch(val.toLowerCase()){
-            case "help":
-                terminal.innerHTML += "📌 الأوامر المتاحة: help, time, clear, echo, whoami, date, hello<br>";
-                break;
-            case "time":
-                terminal.innerHTML += "🕒 " + new Date().toLocaleTimeString() + "<br>";
-                break;
-            case "date":
-                terminal.innerHTML += "📅 " + new Date().toLocaleDateString() + "<br>";
-                break;
-            case "clear":
-                terminal.innerHTML = "";
-                break;
-            case "whoami":
-                terminal.innerHTML += "👤 أنت مستخدم LordKrax<br>";
-                break;
-            case "echo":
-                terminal.innerHTML += "🔊 LordKrax OS v2<br>";
-                break;
-            case "hello":
-                terminal.innerHTML += "👋 مرحباً بك في النظام!<br>";
-                break;
-            default:
-                terminal.innerHTML += "❌ أمر غير معروف. اكتب 'help'<br>";
+function typeEffect() {
+    const currentText = textLines[lineIndex];
+    
+    if (!isDeleting) {
+        // كتابة
+        typingElement.textContent = currentText.substring(0, charIndex + 1);
+        charIndex++;
+        
+        if (charIndex === currentText.length) {
+            isDeleting = true;
+            setTimeout(typeEffect, 2500); // انتظر قبل المسح
+            return;
         }
-
-        playSound();
-        e.target.value = "";
-        // تمرير للأسفل
-        terminal.scrollTop = terminal.scrollHeight;
+        setTimeout(typeEffect, 60);
+    } else {
+        // مسح
+        typingElement.textContent = currentText.substring(0, charIndex - 1);
+        charIndex--;
+        
+        if (charIndex === 0) {
+            isDeleting = false;
+            lineIndex = (lineIndex + 1) % textLines.length; // انتقل للسطر التالي
+            setTimeout(typeEffect, 500);
+            return;
+        }
+        setTimeout(typeEffect, 30);
     }
 }
 
-/* ===== CHAT BOT (محسّن) ===== */
-function chatEnter(e){
-    if(e.key === "Enter"){
-        let val = e.target.value.trim();
-        if(!val) return;
+// بدء التأثير
+typeEffect();
 
-        let box = document.getElementById("chatBox");
-        box.innerHTML += "🙋 You: " + val + "<br>";
+// ============================================
+// 2. MUSIC CONTROL (محسّن)
+// ============================================
+const music = document.getElementById("music");
+const btn = document.getElementById("musicBtn");
+let isMusicPlaying = false;
 
-        // ردود ذكية أكثر
-        let reply = smartReply(val);
-        box.innerHTML += "🤖 Bot: " + reply + "<br>";
-
-        playSound();
-        e.target.value = "";
-        box.scrollTop = box.scrollHeight;
-    }
-}
-
-function smartReply(msg){
-    msg = msg.toLowerCase();
-
-    if(msg.includes("hi") || msg.includes("hello") || msg.includes("مرحبا"))
-        return "👋 Hello! كيف يمكنني مساعدتك؟";
-
-    if(msg.includes("who") || msg.includes("what") || msg.includes("من"))
-        return "🤖 أنا مساعد LordKrax OS، مصمم لمساعدتك في مهامك.";
-
-    if(msg.includes("time") || msg.includes("وقت"))
-        return "🕒 الوقت الآن: " + new Date().toLocaleTimeString();
-
-    if(msg.includes("help") || msg.includes("مساعدة"))
-        return "💡 يمكنك سؤالي عن: الوقت، المشاريع، أو أي شيء!";
-
-    if(msg.includes("project") || msg.includes("مشروع"))
-        return "📁 لدي مشاريع في: Discord Bots, Automation, FiveM, Web Apps";
-
-    if(msg.includes("thank") || msg.includes("شكر"))
-        return "❤️ العفو! أنا هنا لخدمتك.";
-
-    return "🧠 لم أفهم تماماً. حاول إعادة الصياغة أو اسأل عن 'help'.";
-}
-
-/* ===== SOUND SYSTEM (محسّن) ===== */
-let sound = true;
-
-function toggleSound(){
-    sound = !sound;
-    document.getElementById("statusSound").innerText = "Sound: " + (sound ? "ON" : "OFF");
-    playSound();
-}
-
-function playSound(){
-    if(!sound) return;
-    try {
-        let audio = new Audio("data:audio/wav;base64,U3RldmUgSm9icw=="); // صوت صامت
-        audio.volume = 0.1;
-        audio.play().catch(() => {});
-    } catch(e) {}
-}
-
-/* ===== STORAGE ===== */
-function clearStorage(){
-    localStorage.clear();
-    alert("🗑️ تم مسح جميع البيانات!");
-    location.reload();
-}
-
-/* ===== إحصائيات الزيارات ===== */
-let visits = localStorage.getItem("visits") || 0;
-visits++;
-localStorage.setItem("visits", visits);
-document.getElementById("visitCount").innerText = visits;
-
-/* ===== تشغيل تلقائي عند التحميل ===== */
-window.onload = function(){
-    // عرض رسالة في Terminal
-    if(document.getElementById("login").style.display !== "none"){
-        // مستخدم لم يسجل بعد
+btn.onclick = () => {
+    if (isMusicPlaying) {
+        music.pause();
+        btn.innerHTML = "▶ Play Music";
+        btn.style.borderColor = "#ff00ff";
+        btn.style.color = "#ff00ff";
+        isMusicPlaying = false;
+    } else {
+        music.play().then(() => {
+            btn.innerHTML = "⏸ Pause Music";
+            btn.style.borderColor = "#00ff88";
+            btn.style.color = "#00ff88";
+            isMusicPlaying = true;
+        }).catch((err) => {
+            alert("❌ لم يتمكن من تشغيل الصوت. حاول مرة أخرى.");
+            console.log("Audio Error:", err);
+        });
     }
 };
 
+// إذا انتهى الصوت يعيد تشغيله تلقائياً
+music.onended = () => {
+    if (isMusicPlaying) {
+        music.play();
+    }
+};
+
+// ============================================
+// 3. PROJECTS POPUP
+// ============================================
+function showProjects() {
+    const projects = [
+        "🤖 Discord Bot - Moderation",
+        "⚙️ Automation Scripts",
+        "🚗 FiveM Server Scripts",
+        "🌐 Portfolio Website",
+        "📊 Analytics Dashboard"
+    ];
+    
+    alert("📁 Projects:\n\n" + projects.join("\n"));
+}
+
+// ============================================
+// 4. VISITOR COUNTER (باستخدام localStorage)
+// ============================================
+let visits = localStorage.getItem("lordkrax_visits") || 0;
+visits = parseInt(visits) + 1;
+localStorage.setItem("lordkrax_visits", visits);
+document.getElementById("visitorCount").textContent = visits;
+
+// ============================================
+// 5. KEYBOARD SHORTCUTS
+// ============================================
+document.addEventListener("keydown", (e) => {
+    // زر M لتشغيل/إيقاف الموسيقى
+    if (e.key === "m" || e.key === "M") {
+        btn.click();
+    }
+    
+    // زر Escape لإيقاف الصوت
+    if (e.key === "Escape") {
+        music.pause();
+        btn.innerHTML = "▶ Play Music";
+        btn.style.borderColor = "#ff00ff";
+        btn.style.color = "#ff00ff";
+        isMusicPlaying = false;
+    }
+});
+
+// ============================================
+// 6. CONSOLE WELCOME
+// ============================================
+console.log("%c⚡ LordKrax OS v2.0", "font-size:20px; color:#00f0ff; font-weight:bold;");
+console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#aac;");
+console.log("%c🔗 GitHub: https://github.com/YourUsername", "font-size:12px; color:#888;");
+
+// ============================================
+// 7. DYNAMIC BACKGROUND (تأثير النجوم)
+// ============================================
+function createStars() {
+    const stars = 50;
+    for (let i = 0; i < stars; i++) {
+        const star = document.createElement("div");
+        star.style.cssText = `
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            top: ${Math.random() * 100}%;
+            left: ${Math.random() * 100}%;
+            opacity: ${Math.random() * 0.8 + 0.2};
+            animation: twinkle ${Math.random() * 3 + 2}s infinite alternate;
+            z-index: 0;
+            pointer-events: none;
+        `;
+        document.body.appendChild(star);
+    }
+}
+
+// إضافة تأثير وميض للنجوم
+const style = document.createElement("style");
+style.textContent = `
+    @keyframes twinkle {
+        0% { opacity: 0.2; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1.2); }
+    }
+`;
+document.head.appendChild(style);
+
+createStars();
+
+// ============================================
+// 8. تحميل الصورة الاحتياطية إذا فشلت
+// ============================================
+document.querySelector(".pfp").onerror = function() {
+    this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%2300f0ff'/%3E%3Ctext x='75' y='85' font-size='40' text-anchor='middle' fill='black' font-family='monospace'%3ELK%3C/text%3E%3C/svg%3E";
+};
+
+console.log("✅ LordKrax OS loaded successfully!");
 </script>
+
 </body>
 </html>
