@@ -16,8 +16,8 @@
 
 body {
     font-family: 'Orbitron', sans-serif;
-    background: radial-gradient(circle at 50% 0%, #0a0a1a, #000000);
-    color: #ffffff;
+    background: #000000;
+    color: #1ecea7;
     text-align: center;
     min-height: 100vh;
     display: flex;
@@ -28,6 +28,7 @@ body {
     position: relative;
 }
 
+/* ✅ خلفية متحركة سوداء */
 body::before {
     content: '';
     position: absolute;
@@ -36,18 +37,19 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.03) 2px, rgba(0, 240, 255, 0.03) 4px),
-        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0, 240, 255, 0.03) 2px, rgba(0, 240, 255, 0.03) 4px);
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(30, 206, 167, 0.03) 2px, rgba(30, 206, 167, 0.03) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(30, 206, 167, 0.03) 2px, rgba(30, 206, 167, 0.03) 4px);
     pointer-events: none;
     z-index: 0;
 }
 
+/* ✅ الصورة الرمزية */
 .pfp {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    border: 3px solid #00f0ff;
-    box-shadow: 0 0 30px #00f0ff, 0 0 60px rgba(0, 240, 255, 0.3);
+    border: 3px solid #1ecea7;
+    box-shadow: 0 0 30px #1ecea7, 0 0 60px rgba(30, 206, 167, 0.3);
     transition: 0.5s ease;
     object-fit: cover;
     position: relative;
@@ -57,27 +59,30 @@ body::before {
 
 .pfp:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 50px #00f0ff, 0 0 100px rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 50px #1ecea7, 0 0 100px rgba(30, 206, 167, 0.5);
 }
 
 @keyframes glowPulse {
-    0% { box-shadow: 0 0 20px #00f0ff, 0 0 40px rgba(0, 240, 255, 0.2); }
-    100% { box-shadow: 0 0 40px #00f0ff, 0 0 80px rgba(0, 240, 255, 0.4); }
+    0% { box-shadow: 0 0 20px #1ecea7, 0 0 40px rgba(30, 206, 167, 0.2); }
+    100% { box-shadow: 0 0 40px #1ecea7, 0 0 80px rgba(30, 206, 167, 0.4); }
 }
 
+/* ✅ الاسم */
 h1 {
     margin-top: 25px;
     font-size: 48px;
     font-weight: 700;
-    text-shadow: 0 0 20px #00f0ff, 0 0 40px rgba(0, 240, 255, 0.3);
+    color: #1ecea7;
+    text-shadow: 0 0 20px #1ecea7, 0 0 40px rgba(30, 206, 167, 0.3);
     letter-spacing: 4px;
     position: relative;
     z-index: 1;
 }
 
+/* ✅ النص الترحيبي المتغير */
 .welcome-text {
     font-size: 16px;
-    color: #88ddff;
+    color: #1ecea7;
     margin-top: 8px;
     height: 28px;
     font-weight: 400;
@@ -90,7 +95,7 @@ h1 {
 .welcome-text::after {
     content: '|';
     animation: blink 0.8s infinite;
-    color: #00f0ff;
+    color: #1ecea7;
 }
 
 @keyframes blink {
@@ -98,9 +103,10 @@ h1 {
     50% { opacity: 0; }
 }
 
+/* ✅ النص المتغير تحت الترحيب */
 .typing {
     font-size: 18px;
-    color: #aac;
+    color: #1ecea7;
     margin-top: 12px;
     height: 30px;
     font-weight: 400;
@@ -114,17 +120,19 @@ h1 {
     animation: blink 0.8s infinite;
 }
 
+/* ✅ الساعة الرقمية */
 .clock {
     font-size: 20px;
-    color: #00f0ff;
+    color: #1ecea7;
     margin-top: 10px;
     letter-spacing: 4px;
-    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    text-shadow: 0 0 20px rgba(30, 206, 167, 0.3);
     position: relative;
     z-index: 1;
     font-family: 'Orbitron', monospace;
 }
 
+/* ✅ الأزرار */
 .links {
     margin-top: 25px;
     display: flex;
@@ -138,15 +146,15 @@ h1 {
 .links a {
     display: inline-block;
     padding: 12px 30px;
-    border: 1.5px solid #00f0ff;
-    color: #00f0ff;
+    border: 1.5px solid #1ecea7;
+    color: #1ecea7;
     text-decoration: none;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 1px;
     transition: 0.3s ease;
-    background: rgba(0, 240, 255, 0.05);
+    background: rgba(30, 206, 167, 0.05);
     backdrop-filter: blur(5px);
     position: relative;
     overflow: hidden;
@@ -159,7 +167,7 @@ h1 {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(30, 206, 167, 0.2), transparent);
     transition: 0.5s;
 }
 
@@ -168,18 +176,19 @@ h1 {
 }
 
 .links a:hover {
-    background: #00f0ff;
-    color: #000;
-    box-shadow: 0 0 30px #00f0ff, 0 0 60px rgba(0, 240, 255, 0.3);
+    background: #1ecea7;
+    color: #000000;
+    box-shadow: 0 0 30px #1ecea7, 0 0 60px rgba(30, 206, 167, 0.3);
     transform: translateY(-3px);
 }
 
+/* ✅ زر الموسيقى */
 #musicBtn {
     margin-top: 20px;
     padding: 12px 35px;
-    border: 1.5px solid #ff00ff;
-    background: rgba(255, 0, 255, 0.05);
-    color: #ff00ff;
+    border: 1.5px solid #1ecea7;
+    background: rgba(30, 206, 167, 0.05);
+    color: #1ecea7;
     font-family: 'Orbitron', sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -192,19 +201,25 @@ h1 {
 }
 
 #musicBtn:hover {
-    background: #ff00ff;
-    color: #000;
-    box-shadow: 0 0 30px #ff00ff, 0 0 60px rgba(255, 0, 255, 0.3);
+    background: #1ecea7;
+    color: #000000;
+    box-shadow: 0 0 30px #1ecea7, 0 0 60px rgba(30, 206, 167, 0.3);
     transform: translateY(-3px);
 }
 
+/* ✅ عداد الزوار */
 .visitor {
     margin-top: 20px;
     font-size: 12px;
-    color: #556;
+    color: #1ecea7;
     letter-spacing: 2px;
     position: relative;
     z-index: 1;
+}
+
+#visitorCount {
+    color: #1ecea7;
+    font-weight: bold;
 }
 
 @media (max-width: 600px) {
@@ -313,10 +328,14 @@ const firebaseConfig = {
 };
 
 // تهيئة Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+try {
+    firebase.initializeApp(firebaseConfig);
+    console.log("✅ Firebase initialized successfully!");
+} catch (error) {
+    console.error("❌ Firebase initialization error:", error);
+}
 
-console.log("✅ Firebase initialized successfully!");
+const database = firebase.database();
 
 // ============================================
 // VISITOR COUNTER (عداد الزوار العام)
@@ -324,10 +343,12 @@ console.log("✅ Firebase initialized successfully!");
 const visitorRef = database.ref('visitors');
 
 function updateVisitorCount() {
+    console.log("🔄 جاري تحديث الزيارات...");
     visitorRef.once('value')
         .then((snapshot) => {
             let count = snapshot.val() || 0;
             count = parseInt(count) + 1;
+            console.log("📊 العدد الجديد:", count);
             
             visitorRef.set(count)
                 .then(() => {
@@ -336,10 +357,12 @@ function updateVisitorCount() {
                 })
                 .catch((error) => {
                     console.error('❌ خطأ في حفظ الزيارات:', error);
+                    alert('❌ خطأ في حفظ الزيارات: ' + error.message);
                 });
         })
         .catch((error) => {
             console.error('❌ خطأ في قراءة الزيارات:', error);
+            alert('❌ خطأ في قراءة الزيارات: ' + error.message);
         });
 }
 
@@ -486,7 +509,7 @@ canvas.style.cssText = `
     height: 100%;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.12;
+    opacity: 0.08;
 `;
 
 function resizeCanvas() {
@@ -512,7 +535,7 @@ function drawMatrix() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    ctx.fillStyle = '#00f0ff';
+    ctx.fillStyle = '#1ecea7';
     ctx.font = '14px monospace';
     
     for (let i = 0; i < drops.length; i++) {
@@ -540,14 +563,14 @@ btn.onclick = () => {
     if (isMusicPlaying) {
         music.pause();
         btn.innerHTML = "▶ Play Music";
-        btn.style.borderColor = "#ff00ff";
-        btn.style.color = "#ff00ff";
+        btn.style.borderColor = "#1ecea7";
+        btn.style.color = "#1ecea7";
         isMusicPlaying = false;
     } else {
         music.play().then(() => {
             btn.innerHTML = "⏸ Pause Music";
-            btn.style.borderColor = "#00ff88";
-            btn.style.color = "#00ff88";
+            btn.style.borderColor = "#1ecea7";
+            btn.style.color = "#1ecea7";
             isMusicPlaying = true;
         }).catch((err) => {
             alert("❌ لم يتمكن من تشغيل الصوت. حاول مرة أخرى.");
@@ -582,19 +605,19 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
         music.pause();
         btn.innerHTML = "▶ Play Music";
-        btn.style.borderColor = "#ff00ff";
-        btn.style.color = "#ff00ff";
+        btn.style.borderColor = "#1ecea7";
+        btn.style.color = "#1ecea7";
         isMusicPlaying = false;
     }
 });
 
-console.log("%c⚡ LordKrax OS v4.0", "font-size:20px; color:#00f0ff; font-weight:bold;");
-console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#aac;");
-console.log("%c🔗 GitHub: https://github.com/LordKrax", "font-size:12px; color:#888;");
-console.log("%c👁️ Visitor counter with Firebase!", "font-size:12px; color:#88ddff;");
+console.log("%c⚡ LordKrax OS v4.0", "font-size:20px; color:#1ecea7; font-weight:bold;");
+console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#1ecea7;");
+console.log("%c🔗 GitHub: https://github.com/LordKrax", "font-size:12px; color:#1ecea7;");
+console.log("%c👁️ Visitor counter with Firebase!", "font-size:12px; color:#1ecea7;");
 
 document.querySelector(".pfp").onerror = function() {
-    this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%2300f0ff'/%3E%3Ctext x='75' y='85' font-size='40' text-anchor='middle' fill='black' font-family='monospace'%3ELK%3C/text%3E%3C/svg%3E";
+    this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%231ecea7'/%3E%3Ctext x='75' y='85' font-size='40' text-anchor='middle' fill='black' font-family='monospace'%3ELK%3C/text%3E%3C/svg%3E";
 };
 
 console.log("✅ LordKrax OS loaded successfully!");
