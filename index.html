@@ -78,7 +78,31 @@ h1 {
     z-index: 1;
 }
 
-/* ✅ النص المتغير */
+/* ✅ النص الترحيبي المتغير */
+.welcome-text {
+    font-size: 16px;
+    color: #88ddff;
+    margin-top: 8px;
+    height: 28px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+    min-height: 28px;
+}
+
+.welcome-text::after {
+    content: '|';
+    animation: blink 0.8s infinite;
+    color: #00f0ff;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ✅ النص المتغير تحت الترحيب */
 .typing {
     font-size: 18px;
     color: #aac;
@@ -95,14 +119,21 @@ h1 {
     animation: blink 0.8s infinite;
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+/* ✅ الساعة الرقمية */
+.clock {
+    font-size: 20px;
+    color: #00f0ff;
+    margin-top: 10px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    position: relative;
+    z-index: 1;
+    font-family: 'Orbitron', monospace;
 }
 
 /* ✅ الأزرار */
 .links {
-    margin-top: 35px;
+    margin-top: 25px;
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
@@ -128,7 +159,6 @@ h1 {
     overflow: hidden;
 }
 
-/* ✅ تأثير الأزرار */
 .links a::before {
     content: '';
     position: absolute;
@@ -153,7 +183,7 @@ h1 {
 
 /* ✅ زر الموسيقى */
 #musicBtn {
-    margin-top: 25px;
+    margin-top: 20px;
     padding: 12px 35px;
     border: 1.5px solid #ff00ff;
     background: rgba(255, 0, 255, 0.05);
@@ -178,7 +208,7 @@ h1 {
 
 /* ✅ عداد الزوار */
 .visitor {
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 12px;
     color: #556;
     letter-spacing: 2px;
@@ -199,9 +229,19 @@ h1 {
         letter-spacing: 2px;
     }
 
+    .welcome-text {
+        font-size: 13px;
+        height: 24px;
+        min-height: 24px;
+    }
+
     .typing {
         font-size: 14px;
         padding: 0 10px;
+    }
+
+    .clock {
+        font-size: 16px;
     }
 
     .links a {
@@ -220,14 +260,20 @@ h1 {
 
 <body>
 
-<!-- ✅ الصورة الرمزية - استخدم رابط صورتك من GitHub -->
-<img class="pfp" src="https://avatars.githubusercontent.com/u/123456789?v=4" alt="LordKrax">
+<!-- ✅ الصورة الرمزية -->
+<img class="pfp" src="https://github.com/LordKrax.png" alt="LordKrax">
 
 <!-- ✅ الاسم -->
 <h1>LordKrax</h1>
 
-<!-- ✅ النص المتحرك -->
+<!-- ✅ النص الترحيبي المتغير -->
+<div class="welcome-text" id="welcomeText"></div>
+
+<!-- ✅ النص المتغير (المهنة) -->
 <div class="typing" id="typing"></div>
+
+<!-- ✅ الساعة الرقمية -->
+<div class="clock" id="clock">--:--:--</div>
 
 <!-- ✅ الروابط -->
 <div class="links">
@@ -256,14 +302,61 @@ h1 {
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
+<!-- ✅ Canvas لتأثير Matrix -->
+<canvas id="matrixCanvas"></canvas>
+
 <script>
 // ============================================
-// 1. TYPING EFFECT (محسّن)
+// 1. WELCOME TEXT EFFECT (ترحيب متغير)
+// ============================================
+const welcomeLines = [
+    "Hello my name is LordKrax",
+    "⚡ Cyberpunk Developer",
+    "🎮 Discord & FiveM Expert",
+    "🚀 Building the future"
+];
+
+let welcomeIndex = 0;
+let welcomeChar = 0;
+let isWelcomeDeleting = false;
+const welcomeElement = document.getElementById("welcomeText");
+
+function welcomeEffect() {
+    const currentText = welcomeLines[welcomeIndex];
+    
+    if (!isWelcomeDeleting) {
+        welcomeElement.textContent = currentText.substring(0, welcomeChar + 1);
+        welcomeChar++;
+        
+        if (welcomeChar === currentText.length) {
+            isWelcomeDeleting = true;
+            setTimeout(welcomeEffect, 2000);
+            return;
+        }
+        setTimeout(welcomeEffect, 50);
+    } else {
+        welcomeElement.textContent = currentText.substring(0, welcomeChar - 1);
+        welcomeChar--;
+        
+        if (welcomeChar === 0) {
+            isWelcomeDeleting = false;
+            welcomeIndex = (welcomeIndex + 1) % welcomeLines.length;
+            setTimeout(welcomeEffect, 400);
+            return;
+        }
+        setTimeout(welcomeEffect, 30);
+    }
+}
+
+welcomeEffect();
+
+// ============================================
+// 2. TYPING EFFECT (المهنة)
 // ============================================
 const textLines = [
     "Discord Bots • Automation • FiveM Developer",
-    "⚡ Cyberpunk • Code • Creativity",
-    "🚀 Building the future, one line at a time"
+    "⚡ Code • Creativity • Innovation",
+    "🛠️ Full Stack Developer"
 ];
 
 let lineIndex = 0;
@@ -301,7 +394,81 @@ function typeEffect() {
 typeEffect();
 
 // ============================================
-// 2. MUSIC CONTROL
+// 3. DIGITAL CLOCK (ساعة رقمية)
+// ============================================
+function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+// ============================================
+// 4. MATRIX EFFECT (تأثير Matrix)
+// ============================================
+const canvas = document.getElementById('matrixCanvas');
+const ctx = canvas.getContext('2d');
+
+canvas.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.12;
+`;
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const drops = [];
+
+for (let i = 0; i < 120; i++) {
+    drops.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        speed: 10 + Math.random() * 20,
+        char: chars[Math.floor(Math.random() * chars.length)]
+    });
+}
+
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = '14px monospace';
+    
+    for (let i = 0; i < drops.length; i++) {
+        const drop = drops[i];
+        ctx.fillText(drop.char, drop.x, drop.y);
+        
+        drop.y += drop.speed;
+        drop.char = chars[Math.floor(Math.random() * chars.length)];
+        
+        if (drop.y > canvas.height) {
+            drop.y = -20;
+            drop.x = Math.random() * canvas.width;
+            drop.speed = 10 + Math.random() * 20;
+        }
+    }
+}
+
+setInterval(drawMatrix, 50);
+
+// ============================================
+// 5. MUSIC CONTROL
 // ============================================
 const music = document.getElementById("music");
 const btn = document.getElementById("musicBtn");
@@ -334,7 +501,7 @@ music.onended = () => {
 };
 
 // ============================================
-// 3. PROJECTS POPUP
+// 6. PROJECTS POPUP
 // ============================================
 function showProjects() {
     const projects = [
@@ -349,7 +516,7 @@ function showProjects() {
 }
 
 // ============================================
-// 4. VISITOR COUNTER
+// 7. VISITOR COUNTER
 // ============================================
 let visits = localStorage.getItem("lordkrax_visits") || 0;
 visits = parseInt(visits) + 1;
@@ -357,7 +524,7 @@ localStorage.setItem("lordkrax_visits", visits);
 document.getElementById("visitorCount").textContent = visits;
 
 // ============================================
-// 5. KEYBOARD SHORTCUTS
+// 8. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener("keydown", (e) => {
     if (e.key === "m" || e.key === "M") {
@@ -374,49 +541,14 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ============================================
-// 6. CONSOLE WELCOME
+// 9. CONSOLE WELCOME
 // ============================================
-console.log("%c⚡ LordKrax OS v2.0", "font-size:20px; color:#00f0ff; font-weight:bold;");
+console.log("%c⚡ LordKrax OS v3.0", "font-size:20px; color:#00f0ff; font-weight:bold;");
 console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#aac;");
 console.log("%c🔗 GitHub: https://github.com/LordKrax", "font-size:12px; color:#888;");
 
 // ============================================
-// 7. DYNAMIC BACKGROUND (تأثير النجوم)
-// ============================================
-function createStars() {
-    const stars = 50;
-    for (let i = 0; i < stars; i++) {
-        const star = document.createElement("div");
-        star.style.cssText = `
-            position: fixed;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            top: ${Math.random() * 100}%;
-            left: ${Math.random() * 100}%;
-            opacity: ${Math.random() * 0.8 + 0.2};
-            animation: twinkle ${Math.random() * 3 + 2}s infinite alternate;
-            z-index: 0;
-            pointer-events: none;
-        `;
-        document.body.appendChild(star);
-    }
-}
-
-const style = document.createElement("style");
-style.textContent = `
-    @keyframes twinkle {
-        0% { opacity: 0.2; transform: scale(0.8); }
-        100% { opacity: 1; transform: scale(1.2); }
-    }
-`;
-document.head.appendChild(style);
-
-createStars();
-
-// ============================================
-// 8. تحميل الصورة الاحتياطية إذا فشلت
+// 10. تحميل الصورة الاحتياطية
 // ============================================
 document.querySelector(".pfp").onerror = function() {
     this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%2300f0ff'/%3E%3Ctext x='75' y='85' font-size='40' text-anchor='middle' fill='black' font-family='monospace'%3ELK%3C/text%3E%3C/svg%3E";
