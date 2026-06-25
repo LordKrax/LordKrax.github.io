@@ -300,21 +300,23 @@ h1 {
 
 <script>
 // ============================================
-// FIREBASE CONFIG (استبدل بيناتك هنا)
+// FIREBASE CONFIG (بياناتك الحقيقية ✅)
 // ============================================
 const firebaseConfig = {
-    apiKey: "AIzaSyDummyKeyHere123456789",
-    authDomain: "your-app.firebaseapp.com",
-    databaseURL: "https://your-app-default-rtdb.firebaseio.com",
-    projectId: "your-app",
-    storageBucket: "your-app.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef123456"
+  apiKey: "AIzaSyBo9GTqvu0Mvv4DK3WejBEXoGqo0Z6Dw3M",
+  authDomain: "lordkrax-visitors.firebaseapp.com",
+  projectId: "lordkrax-visitors",
+  storageBucket: "lordkrax-visitors.firebasestorage.app",
+  messagingSenderId: "397247025420",
+  appId: "1:397247025420:web:3c0dbf739e11ef39cd7929",
+  measurementId: "G-DT8VXN8JZZ"
 };
 
 // تهيئة Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+
+console.log("✅ Firebase initialized successfully!");
 
 // ============================================
 // VISITOR COUNTER (عداد الزوار العام)
@@ -322,13 +324,11 @@ const database = firebase.database();
 const visitorRef = database.ref('visitors');
 
 function updateVisitorCount() {
-    // قراءة العداد الحالي
     visitorRef.once('value')
         .then((snapshot) => {
             let count = snapshot.val() || 0;
             count = parseInt(count) + 1;
             
-            // حفظ العداد الجديد
             visitorRef.set(count)
                 .then(() => {
                     document.getElementById('visitorCount').textContent = count;
@@ -343,11 +343,13 @@ function updateVisitorCount() {
         });
 }
 
-// جلب العداد الحالي وعرضه
 function getVisitorCount() {
     visitorRef.on('value', (snapshot) => {
         const count = snapshot.val() || 0;
         document.getElementById('visitorCount').textContent = count;
+        console.log('📊 عدد الزيارات الحالي:', count);
+    }, (error) => {
+        console.error('❌ خطأ في الاستماع للزيارات:', error);
     });
 }
 
@@ -356,7 +358,7 @@ getVisitorCount();
 updateVisitorCount();
 
 // ============================================
-// 1. تشغيل صوت الكتابة
+// باقي الكود
 // ============================================
 const typingSound = document.getElementById("typingSound");
 
@@ -367,9 +369,6 @@ function playTypingSound() {
     } catch(e) {}
 }
 
-// ============================================
-// 2. WELCOME TEXT EFFECT
-// ============================================
 const welcomeLines = [
     "Hello my name is LordKrax",
     "⚡ Cyberpunk Developer",
@@ -415,9 +414,6 @@ function welcomeEffect() {
 
 welcomeEffect();
 
-// ============================================
-// 3. TYPING EFFECT
-// ============================================
 const textLines = [
     "Discord Bots • Automation • FiveM Developer",
     "⚡ Code • Creativity • Innovation",
@@ -462,9 +458,6 @@ function typeEffect() {
 
 typeEffect();
 
-// ============================================
-// 4. DIGITAL CLOCK
-// ============================================
 function updateClock() {
     const now = new Date();
     let hours = now.getHours();
@@ -482,9 +475,6 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// ============================================
-// 5. MATRIX EFFECT
-// ============================================
 const canvas = document.getElementById('matrixCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -542,9 +532,6 @@ function drawMatrix() {
 
 setInterval(drawMatrix, 50);
 
-// ============================================
-// 6. MUSIC CONTROL
-// ============================================
 const music = document.getElementById("music");
 const btn = document.getElementById("musicBtn");
 let isMusicPlaying = false;
@@ -575,9 +562,6 @@ music.onended = () => {
     }
 };
 
-// ============================================
-// 7. PROJECTS POPUP
-// ============================================
 function showProjects() {
     const projects = [
         "🤖 Discord Bot - Moderation",
@@ -590,9 +574,6 @@ function showProjects() {
     alert("📁 Projects:\n\n" + projects.join("\n"));
 }
 
-// ============================================
-// 8. KEYBOARD SHORTCUTS
-// ============================================
 document.addEventListener("keydown", (e) => {
     if (e.key === "m" || e.key === "M") {
         btn.click();
@@ -607,17 +588,11 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// ============================================
-// 9. CONSOLE WELCOME
-// ============================================
 console.log("%c⚡ LordKrax OS v4.0", "font-size:20px; color:#00f0ff; font-weight:bold;");
 console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#aac;");
 console.log("%c🔗 GitHub: https://github.com/LordKrax", "font-size:12px; color:#888;");
 console.log("%c👁️ Visitor counter with Firebase!", "font-size:12px; color:#88ddff;");
 
-// ============================================
-// 10. تحميل الصورة الاحتياطية
-// ============================================
 document.querySelector(".pfp").onerror = function() {
     this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%2300f0ff'/%3E%3Ctext x='75' y='85' font-size='40' text-anchor='middle' fill='black' font-family='monospace'%3ELK%3C/text%3E%3C/svg%3E";
 };
