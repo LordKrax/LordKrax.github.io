@@ -3,61 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LordKrax Dashboard</title>
+<title>LordKrax OS</title>
 
 <style>
 body {
     margin: 0;
     font-family: monospace;
-    background: #000;
+    background: black;
     color: #00f0ff;
     overflow: hidden;
 }
 
-/* BACKGROUND */
-canvas {
+/* LOGIN SCREEN */
+#login {
     position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-}
-
-/* TOP BAR */
-.topbar {
+    width: 100%;
+    height: 100%;
+    background: black;
     display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-    border-bottom: 1px solid #00f0ff;
-    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 999;
 }
 
-/* GRID DASHBOARD */
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    padding: 20px;
-}
-
-/* BOXES */
-.box {
-    border: 1px solid #00f0ff;
-    padding: 15px;
-    min-height: 200px;
-    box-shadow: 0 0 10px #00f0ff;
-}
-
-/* PFP */
-.pfp {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    border: 2px solid #00f0ff;
-}
-
-/* BUTTONS */
-button {
+input {
+    padding: 10px;
     margin: 5px;
+    background: transparent;
+    border: 1px solid #00f0ff;
+    color: #00f0ff;
+}
+
+button {
     padding: 8px 12px;
     background: transparent;
     border: 1px solid #00f0ff;
@@ -65,141 +43,205 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background: #00f0ff;
-    color: black;
+/* TOP BAR */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #00f0ff;
+}
+
+/* NAV */
+.nav {
+    display: flex;
+    gap: 10px;
+}
+
+/* PAGES */
+.page {
+    display: none;
+    padding: 20px;
+}
+
+/* ACTIVE PAGE */
+.active {
+    display: block;
+}
+
+/* TERMINAL */
+#terminal {
+    border: 1px solid #00f0ff;
+    padding: 10px;
+    height: 200px;
+    overflow-y: auto;
+}
+
+/* CHAT */
+#chatBox {
+    border: 1px solid #00f0ff;
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
-
-<!-- TOP BAR -->
-<div class="topbar">
-    <div>⚡ LordKrax Dashboard</div>
-    <div id="time"></div>
+<!-- LOGIN -->
+<div id="login">
+    <h2>LOGIN OS</h2>
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Enter</button>
 </div>
 
-<!-- GRID -->
+<!-- TOPBAR -->
+<div class="topbar">
+    <div>⚡ LORDKrax OS</div>
+    <div class="nav">
+        <button onclick="openPage('home')">Home</button>
+        <button onclick="openPage('projects')">Projects</button>
+        <button onclick="openPage('settings')">Settings</button>
+        <button onclick="openPage('about')">About</button>
+    </div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+
 <div class="grid">
 
-    <!-- PROFILE -->
-    <div class="box">
-        <img class="pfp" src="https://github.com/LordKrax.png">
-        <h2>LordKrax</h2>
-        <p>Discord Bots • Automation • FiveM</p>
-    </div>
+<div>
+<h3>Terminal</h3>
+<div id="terminal"></div>
+<input id="cmd" placeholder="type command..." onkeydown="cmdEnter(event)">
+</div>
 
-    <!-- TERMINAL -->
-    <div class="box" id="terminal">
-        > Booting system...<br>
-    </div>
+<div>
+<h3>Chat AI</h3>
+<div id="chatBox"></div>
+<input id="chatInput" placeholder="chat..." onkeydown="chatEnter(event)">
+</div>
 
-    <!-- GITHUB -->
-    <div class="box">
-        <h3>GitHub Stats</h3>
-        <button onclick="loadGitHub()">Load</button>
-        <p id="github"></p>
-    </div>
+</div>
 
-    <!-- VISITOR -->
-    <div class="box">
-        <h3>Visitors</h3>
-        <button onclick="visit()">Check</button>
-        <p id="visits"></p>
-    </div>
+</div>
 
+<!-- PROJECTS -->
+<div id="projects" class="page">
+<h2>Projects</h2>
+<p>Discord Bots • Automation • FiveM</p>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings" class="page">
+<h2>Settings</h2>
+<button onclick="toggleSound()">Toggle Sound</button>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="page">
+<h2>About</h2>
+<p>Developer OS Dashboard v1</p>
 </div>
 
 <script>
 
-// ===== CLOCK =====
-function updateTime() {
-    document.getElementById("time").innerText =
-        new Date().toLocaleTimeString();
+/* LOGIN */
+function login(){
+    document.getElementById("login").style.display = "none";
+    playSound();
 }
-setInterval(updateTime, 1000);
 
-// ===== TERMINAL TYPE =====
-const lines = [
-"> Initializing modules...",
-"> Loading Discord Bots...",
-"> Automation engine online...",
-"> FiveM framework ready...",
-"> System stable ✔"
-];
+/* NAV */
+function openPage(id){
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    playSound();
+}
 
-let i = 0;
+/* TERMINAL */
 let terminal = document.getElementById("terminal");
 
-function type() {
-    if (i < lines.length) {
-        terminal.innerHTML += lines[i] + "<br>";
-        i++;
-        setTimeout(type, 500);
+function cmdEnter(e){
+    if(e.key === "Enter"){
+        let val = e.target.value;
+        terminal.innerHTML += "> " + val + "<br>";
+
+        if(val === "help"){
+            terminal.innerHTML += "commands: help, time, clear<br>";
+        }
+
+        if(val === "time"){
+            terminal.innerHTML += new Date() + "<br>";
+        }
+
+        if(val === "clear"){
+            terminal.innerHTML = "";
+        }
+
+        playSound();
+        e.target.value = "";
     }
 }
-type();
 
-// ===== GITHUB API =====
-async function loadGitHub() {
-    let res = await fetch("https://api.github.com/users/LordKrax");
-    let data = await res.json();
+/* CHAT BOT (fake AI) */
+function chatEnter(e){
+    if(e.key === "Enter"){
+        let val = e.target.value;
+        let box = document.getElementById("chatBox");
 
-    document.getElementById("github").innerHTML =
-        "Repos: " + data.public_repos + "<br>" +
-        "Followers: " + data.followers + "<br>" +
-        "Following: " + data.following;
-}
+        box.innerHTML += "You: " + val + "<br>";
+        box.innerHTML += "Bot: " + fakeAI(val) + "<br>";
 
-// ===== VISITOR COUNT =====
-function visit() {
-    let v = localStorage.getItem("visits") || 0;
-    v++;
-    localStorage.setItem("visits", v);
-    document.getElementById("visits").innerText = v;
-}
-
-// ===== BACKGROUND PARTICLES =====
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for (let i = 0; i < 80; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2,
-        dx: (Math.random() - 0.5),
-        dy: (Math.random() - 0.5)
-    });
-}
-
-function animate() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    for (let p of particles) {
-        p.x += p.dx;
-        p.y += p.dy;
-
-        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-
-        ctx.fillStyle = "#00f0ff";
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
+        playSound();
+        e.target.value = "";
     }
-
-    requestAnimationFrame(animate);
 }
-animate();
+
+function fakeAI(msg){
+    if(msg.includes("hi")) return "Hello 👋";
+    if(msg.includes("who")) return "I am OS Assistant";
+    return "I don't understand yet";
+}
+
+/* SOUND SYSTEM */
+let sound = true;
+function toggleSound(){
+    sound = !sound;
+}
+
+function playSound(){
+    if(!sound) return;
+    let audio = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
+    audio.play();
+}
+
+/* FIREBASE (READY TEMPLATE) */
+/*
+import { initializeApp } from "firebase/app";
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_APP",
+  projectId: "YOUR_ID",
+};
+const app = initializeApp(firebaseConfig);
+*/
+
+/* ANALYTICS (simple demo) */
+let visits = localStorage.getItem("visits") || 0;
+visits++;
+localStorage.setItem("visits", visits);
+
+console.log("Visits:", visits);
 
 </script>
 
