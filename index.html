@@ -6,206 +6,137 @@
 <title>LordKrax</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap');
-
 body {
     margin: 0;
-    font-family: 'Orbitron', sans-serif;
-    background: #000;
-    color: white;
+    background: black;
+    color: #00f0ff;
+    font-family: monospace;
     overflow: hidden;
 }
 
-/* LOADING SCREEN */
-#loading {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 999;
-}
-
-.loader {
-    border: 3px solid #222;
-    border-top: 3px solid #00f0ff;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0); }
-    100% { transform: rotate(360deg); }
-}
-
-/* BACKGROUND CANVAS */
-canvas {
+/* VIDEO BACKGROUND (optional) */
+#bgVideo {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -5;
+    opacity: 0.15;
 }
 
-/* MAIN */
+/* CENTER */
 .container {
     text-align: center;
-    margin-top: 80px;
-    transition: transform 0.1s;
+    margin-top: 60px;
 }
 
+/* PFP */
 .pfp {
-    width: 140px;
-    height: 140px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
-    border: 3px solid #00f0ff;
+    border: 2px solid #00f0ff;
     box-shadow: 0 0 20px #00f0ff;
-    object-fit: cover;
 }
 
-h1 {
-    text-shadow: 0 0 15px #00f0ff;
+/* TERMINAL BOX */
+.terminal {
+    margin: auto;
+    margin-top: 20px;
+    width: 70%;
+    padding: 20px;
+    border: 1px solid #00f0ff;
+    text-align: left;
+    min-height: 150px;
+    box-shadow: 0 0 15px #00f0ff;
 }
 
 /* BUTTONS */
-a, button {
+button {
     margin: 10px;
-    padding: 12px 20px;
-    border: 1px solid #00f0ff;
+    padding: 10px 15px;
     background: transparent;
-    color: white;
+    border: 1px solid #00f0ff;
+    color: #00f0ff;
     cursor: pointer;
-    border-radius: 8px;
-    transition: 0.2s;
 }
 
-a:hover, button:hover {
+button:hover {
     background: #00f0ff;
     color: black;
-    box-shadow: 0 0 20px #00f0ff;
-}
-
-/* typing */
-.typing {
-    color: #aaa;
-    height: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOADING -->
-<div id="loading">
-    <div class="loader"></div>
-    <p>Loading...</p>
-</div>
+<!-- 🎥 VIDEO BACKGROUND (optional - replace link) -->
+<!--
+<video autoplay muted loop id="bgVideo">
+    <source src="YOUR_VIDEO.mp4" type="video/mp4">
+</video>
+-->
 
-<!-- BACKGROUND -->
-<canvas id="bg"></canvas>
+<div class="container">
 
-<!-- CONTENT -->
-<div class="container" id="content">
     <img class="pfp" src="https://github.com/LordKrax.png">
 
     <h1>LordKrax</h1>
-    <div class="typing" id="typing"></div>
 
-    <div>
-        <a onclick="clickSound()" href="https://github.com/LordKrax">GitHub</a>
-        <a onclick="clickSound()" href="https://discord.com/users/752438182343344128">Discord</a>
-        <button onclick="toggleMusic(); clickSound()">Music</button>
-    </div>
+    <div class="terminal" id="terminal"></div>
+
+    <button onclick="loadGitHub()">GitHub Stats</button>
+    <button onclick="visitorCount()">Visitor Count</button>
+
+    <p id="stats"></p>
+
 </div>
 
-<audio id="music" loop>
-    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kai_Engel/Impulses/Kai_Engel_-_07_-_Moonlight_Reprise.mp3">
-</audio>
-
-<audio id="click">
-    <source src="https://www.myinstants.com/media/sounds/mouse-click.mp3">
-</audio>
-
 <script>
-// LOADING SCREEN
-setTimeout(() => {
-    document.getElementById("loading").style.display = "none";
-}, 1500);
 
-// TYPING
-const text = "Discord Bots • Automation • FiveM Developer";
+// ===== TERMINAL TYPE EFFECT =====
+const lines = [
+"> Initializing system...",
+"> Loading profile...",
+"> Discord Bots Developer",
+"> Automation Systems Online",
+"> FiveM Framework Ready"
+];
+
 let i = 0;
-function type() {
-    if (i < text.length) {
-        document.getElementById("typing").innerHTML += text[i++];
-        setTimeout(type, 50);
+let terminal = document.getElementById("terminal");
+
+function typeLine() {
+    if (i < lines.length) {
+        terminal.innerHTML += lines[i] + "<br>";
+        i++;
+        setTimeout(typeLine, 600);
     }
 }
-type();
+typeLine();
 
-// MUSIC
-let music = document.getElementById("music");
-function toggleMusic() {
-    if (music.paused) music.play();
-    else music.pause();
+// ===== GITHUB API =====
+async function loadGitHub() {
+    let res = await fetch("https://api.github.com/users/LordKrax");
+    let data = await res.json();
+
+    document.getElementById("stats").innerHTML =
+        "Repos: " + data.public_repos + "<br>" +
+        "Followers: " + data.followers + "<br>" +
+        "Following: " + data.following;
 }
 
-// CLICK SOUND
-function clickSound() {
-    document.getElementById("click").currentTime = 0;
-    document.getElementById("click").play();
+// ===== VISITOR COUNT (simple local) =====
+function visitorCount() {
+    let count = localStorage.getItem("visits") || 0;
+    count++;
+    localStorage.setItem("visits", count);
+    document.getElementById("stats").innerHTML =
+        "Visits: " + count;
 }
 
-// 3D EFFECT
-document.addEventListener("mousemove", (e) => {
-    let x = (window.innerWidth / 2 - e.pageX) / 25;
-    let y = (window.innerHeight / 2 - e.pageY) / 25;
-    document.querySelector(".container").style.transform =
-        `rotateY(${x}deg) rotateX(${y}deg)`;
-});
-
-// PARTICLES BACKGROUND
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for (let i = 0; i < 80; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2,
-        dx: (Math.random() - 0.5),
-        dy: (Math.random() - 0.5)
-    });
-}
-
-function animate() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    for (let p of particles) {
-        p.x += p.dx;
-        p.y += p.dy;
-
-        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-
-        ctx.fillStyle = "#00f0ff";
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    requestAnimationFrame(animate);
-}
-animate();
 </script>
 
 </body>
