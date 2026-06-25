@@ -250,22 +250,16 @@ h1 {
 
 <body>
 
-<!-- ✅ الصورة الرمزية -->
 <img class="pfp" src="https://github.com/LordKrax.png" alt="LordKrax">
 
-<!-- ✅ الاسم -->
 <h1>LordKrax</h1>
 
-<!-- ✅ النص الترحيبي المتغير -->
 <div class="welcome-text" id="welcomeText"></div>
 
-<!-- ✅ النص المتغير (المهنة) -->
 <div class="typing" id="typing"></div>
 
-<!-- ✅ الساعة الرقمية -->
 <div class="clock" id="clock">--:--:--</div>
 
-<!-- ✅ الروابط -->
 <div class="links">
     <a href="https://github.com/LordKrax" target="_blank" title="GitHub">
         <i>⌨️</i> GitHub
@@ -281,26 +275,20 @@ h1 {
     </a>
 </div>
 
-<!-- ✅ زر الموسيقى -->
 <button id="musicBtn">▶ Play Music</button>
 
-<!-- ✅ عداد الزوار -->
 <div class="visitor">👁️ Visitors: <span id="visitorCount">0</span></div>
 
-<!-- ✅ الصوت -->
 <audio id="music" loop preload="auto">
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ✅ صوت الكتابة -->
 <audio id="typingSound" preload="auto">
     <source src="https://www.soundjay.com/mechanical/sounds/typewriter-key-1.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ✅ Canvas لتأثير Matrix -->
 <canvas id="matrixCanvas"></canvas>
 
-<!-- ✅ Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -326,14 +314,13 @@ const auth = firebase.auth();
 console.log("✅ Firebase initialized!");
 
 // ============================================
-// AUTHENTICATION (تسجيل دخول تلقائي)
+// AUTHENTICATION
 // ============================================
 function initVisitorCounter() {
     getVisitorCount();
     updateVisitorCount();
 }
 
-// محاولة تسجيل الدخول بدون حساب
 auth.signInAnonymously()
     .then(() => {
         console.log("✅ تم تسجيل الدخول بنجاح!");
@@ -378,7 +365,6 @@ function updateVisitorCount() {
 }
 
 // ============================================
-// باقي الكود (نفسه)
 // ============================================
 const typingSound = document.getElementById("typingSound");
 
@@ -390,10 +376,9 @@ function playTypingSound() {
 }
 
 const welcomeLines = [
-    "Hello my name is LordKrax",
-    "⚡ Cyberpunk Developer",
-    "🎮 Discord & FiveM Expert",
-    "🚀 Building the future"
+    "Hello, my name is LordKrax!",
+    "Discord & FiveM Expert",
+    "Developer @ OneWay Rp",
 ];
 
 let welcomeIndex = 0;
@@ -435,9 +420,8 @@ function welcomeEffect() {
 welcomeEffect();
 
 const textLines = [
-    "Discord Bots • Automation • FiveM Developer",
-    "⚡ Code • Creativity • Innovation",
-    "🛠️ Full Stack Developer"
+    "Discord Bots Developer • FiveM Developer",
+    "Full Stack Developer"
 ];
 
 let lineIndex = 0;
@@ -584,12 +568,11 @@ music.onended = () => {
 
 function showProjects() {
     const projects = [
-        "🤖 Discord Bot - Moderation",
-        "⚙️ Automation Scripts",
-        "🚗 FiveM Server Scripts",
-        "🌐 Portfolio Website",
-        "📊 Analytics Dashboard"
-    ];
+    "OneWay Rp • Discord Bot",
+    "Soon • FiveM Scripts",
+    "Roblox Bots • XP • Promotions • Events System",
+    "Custom Automation Tools"
+];
     
     alert("📁 Projects:\n\n" + projects.join("\n"));
 }
@@ -608,10 +591,7 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-console.log("%c⚡ LordKrax OS v4.0 🔒", "font-size:20px; color:#1ecea7; font-weight:bold;");
-console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#1ecea7;");
 console.log("%c🔗 GitHub: https://github.com/LordKrax", "font-size:12px; color:#1ecea7;");
-console.log("%c👁️ Visitor counter with Firebase + Authentication!", "font-size:12px; color:#1ecea7;");
 
 document.querySelector(".pfp").onerror = function() {
     this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%231ecea7'/%3E%3Ctext x='75' y='85' font-size='40' text-anchor='middle' fill='black' font-family='monospace'%3ELK%3C/text%3E%3C/svg%3E";
