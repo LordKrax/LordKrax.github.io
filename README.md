@@ -1,1 +1,1 @@
-# LordKrax.github.io
+# LordKrax
