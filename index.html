@@ -302,12 +302,29 @@ h1 {
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
+<!-- ✅ صوت الكتابة -->
+<audio id="typingSound" preload="auto">
+    <source src="https://www.soundjay.com/mechanical/sounds/typewriter-key-1.mp3" type="audio/mpeg">
+</audio>
+
 <!-- ✅ Canvas لتأثير Matrix -->
 <canvas id="matrixCanvas"></canvas>
 
 <script>
 // ============================================
-// 1. WELCOME TEXT EFFECT (ترحيب متغير)
+// 1. تشغيل صوت الكتابة
+// ============================================
+const typingSound = document.getElementById("typingSound");
+
+function playTypingSound() {
+    try {
+        typingSound.currentTime = 0;
+        typingSound.play().catch(() => {});
+    } catch(e) {}
+}
+
+// ============================================
+// 2. WELCOME TEXT EFFECT (مع صوت)
 // ============================================
 const welcomeLines = [
     "Hello my name is LordKrax",
@@ -327,6 +344,10 @@ function welcomeEffect() {
     if (!isWelcomeDeleting) {
         welcomeElement.textContent = currentText.substring(0, welcomeChar + 1);
         welcomeChar++;
+        
+        if (welcomeChar > 0) {
+            playTypingSound();
+        }
         
         if (welcomeChar === currentText.length) {
             isWelcomeDeleting = true;
@@ -351,7 +372,7 @@ function welcomeEffect() {
 welcomeEffect();
 
 // ============================================
-// 2. TYPING EFFECT (المهنة)
+// 3. TYPING EFFECT (المهنة مع صوت)
 // ============================================
 const textLines = [
     "Discord Bots • Automation • FiveM Developer",
@@ -370,6 +391,10 @@ function typeEffect() {
     if (!isDeleting) {
         typingElement.textContent = currentText.substring(0, charIndex + 1);
         charIndex++;
+        
+        if (charIndex > 0) {
+            playTypingSound();
+        }
         
         if (charIndex === currentText.length) {
             isDeleting = true;
@@ -394,21 +419,31 @@ function typeEffect() {
 typeEffect();
 
 // ============================================
-// 3. DIGITAL CLOCK (ساعة رقمية)
+// 4. DIGITAL CLOCK (ساعة رقمية - 12 ساعة مع AM/PM)
 // ============================================
 function updateClock() {
     const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
+    let hours = now.getHours();
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+    
+    // تحديد AM أو PM
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    
+    // تحويل إلى 12 ساعة
+    hours = hours % 12;
+    hours = hours ? hours : 12; // الساعة 0 تصبح 12
+    
+    const hoursStr = String(hours).padStart(2, '0');
+    
+    document.getElementById('clock').textContent = `${hoursStr}:${minutes}:${seconds} ${ampm}`;
 }
 
 setInterval(updateClock, 1000);
 updateClock();
 
 // ============================================
-// 4. MATRIX EFFECT (تأثير Matrix)
+// 5. MATRIX EFFECT (تأثير Matrix)
 // ============================================
 const canvas = document.getElementById('matrixCanvas');
 const ctx = canvas.getContext('2d');
@@ -468,7 +503,7 @@ function drawMatrix() {
 setInterval(drawMatrix, 50);
 
 // ============================================
-// 5. MUSIC CONTROL
+// 6. MUSIC CONTROL
 // ============================================
 const music = document.getElementById("music");
 const btn = document.getElementById("musicBtn");
@@ -501,7 +536,7 @@ music.onended = () => {
 };
 
 // ============================================
-// 6. PROJECTS POPUP
+// 7. PROJECTS POPUP
 // ============================================
 function showProjects() {
     const projects = [
@@ -516,7 +551,7 @@ function showProjects() {
 }
 
 // ============================================
-// 7. VISITOR COUNTER
+// 8. VISITOR COUNTER
 // ============================================
 let visits = localStorage.getItem("lordkrax_visits") || 0;
 visits = parseInt(visits) + 1;
@@ -524,7 +559,7 @@ localStorage.setItem("lordkrax_visits", visits);
 document.getElementById("visitorCount").textContent = visits;
 
 // ============================================
-// 8. KEYBOARD SHORTCUTS
+// 9. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener("keydown", (e) => {
     if (e.key === "m" || e.key === "M") {
@@ -541,14 +576,14 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ============================================
-// 9. CONSOLE WELCOME
+// 10. CONSOLE WELCOME
 // ============================================
 console.log("%c⚡ LordKrax OS v3.0", "font-size:20px; color:#00f0ff; font-weight:bold;");
 console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#aac;");
 console.log("%c🔗 GitHub: https://github.com/LordKrax", "font-size:12px; color:#888;");
 
 // ============================================
-// 10. تحميل الصورة الاحتياطية
+// 11. تحميل الصورة الاحتياطية
 // ============================================
 document.querySelector(".pfp").onerror = function() {
     this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%2300f0ff'/%3E%3Ctext x='75' y='85' font-size='40' text-anchor='middle' fill='black' font-family='monospace'%3ELK%3C/text%3E%3C/svg%3E";
