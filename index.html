@@ -186,19 +186,6 @@ h1 {
     z-index: 1;
 }
 
-/* ✅ شعار في الأسفل */
-.footer {
-    position: fixed;
-    bottom: 15px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 11px;
-    color: #334;
-    letter-spacing: 3px;
-    z-index: 1;
-}
-
 /* ✅ توافق الموبايل */
 @media (max-width: 600px) {
     .pfp {
@@ -233,7 +220,7 @@ h1 {
 
 <body>
 
-<!-- ✅ الصورة الرمزية (استخدم صورتك الخاصة) -->
+<!-- ✅ الصورة الرمزية - استخدم رابط صورتك من GitHub -->
 <img class="pfp" src="https://avatars.githubusercontent.com/u/123456789?v=4" alt="LordKrax">
 
 <!-- ✅ الاسم -->
@@ -242,7 +229,7 @@ h1 {
 <!-- ✅ النص المتحرك -->
 <div class="typing" id="typing"></div>
 
-<!-- ✅ الروابط (تم تعديلها) -->
+<!-- ✅ الروابط -->
 <div class="links">
     <a href="https://github.com/LordKrax" target="_blank" title="GitHub">
         <i>⌨️</i> GitHub
@@ -264,10 +251,7 @@ h1 {
 <!-- ✅ عداد الزوار -->
 <div class="visitor">👁️ Visitors: <span id="visitorCount">0</span></div>
 
-<!-- ✅ تذييل -->
-<div class="footer">✦ LORDKRAX OS ✦</div>
-
-<!-- ✅ الصوت (تم تغيير المصدر ليعمل) -->
+<!-- ✅ الصوت -->
 <audio id="music" loop preload="auto">
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
@@ -291,24 +275,22 @@ function typeEffect() {
     const currentText = textLines[lineIndex];
     
     if (!isDeleting) {
-        // كتابة
         typingElement.textContent = currentText.substring(0, charIndex + 1);
         charIndex++;
         
         if (charIndex === currentText.length) {
             isDeleting = true;
-            setTimeout(typeEffect, 2500); // انتظر قبل المسح
+            setTimeout(typeEffect, 2500);
             return;
         }
         setTimeout(typeEffect, 60);
     } else {
-        // مسح
         typingElement.textContent = currentText.substring(0, charIndex - 1);
         charIndex--;
         
         if (charIndex === 0) {
             isDeleting = false;
-            lineIndex = (lineIndex + 1) % textLines.length; // انتقل للسطر التالي
+            lineIndex = (lineIndex + 1) % textLines.length;
             setTimeout(typeEffect, 500);
             return;
         }
@@ -316,11 +298,10 @@ function typeEffect() {
     }
 }
 
-// بدء التأثير
 typeEffect();
 
 // ============================================
-// 2. MUSIC CONTROL (محسّن)
+// 2. MUSIC CONTROL
 // ============================================
 const music = document.getElementById("music");
 const btn = document.getElementById("musicBtn");
@@ -346,7 +327,6 @@ btn.onclick = () => {
     }
 };
 
-// إذا انتهى الصوت يعيد تشغيله تلقائياً
 music.onended = () => {
     if (isMusicPlaying) {
         music.play();
@@ -369,7 +349,7 @@ function showProjects() {
 }
 
 // ============================================
-// 4. VISITOR COUNTER (باستخدام localStorage)
+// 4. VISITOR COUNTER
 // ============================================
 let visits = localStorage.getItem("lordkrax_visits") || 0;
 visits = parseInt(visits) + 1;
@@ -380,12 +360,10 @@ document.getElementById("visitorCount").textContent = visits;
 // 5. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener("keydown", (e) => {
-    // زر M لتشغيل/إيقاف الموسيقى
     if (e.key === "m" || e.key === "M") {
         btn.click();
     }
     
-    // زر Escape لإيقاف الصوت
     if (e.key === "Escape") {
         music.pause();
         btn.innerHTML = "▶ Play Music";
@@ -400,7 +378,7 @@ document.addEventListener("keydown", (e) => {
 // ============================================
 console.log("%c⚡ LordKrax OS v2.0", "font-size:20px; color:#00f0ff; font-weight:bold;");
 console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#aac;");
-console.log("%c🔗 GitHub: https://github.com/YourUsername", "font-size:12px; color:#888;");
+console.log("%c🔗 GitHub: https://github.com/LordKrax", "font-size:12px; color:#888;");
 
 // ============================================
 // 7. DYNAMIC BACKGROUND (تأثير النجوم)
@@ -426,7 +404,6 @@ function createStars() {
     }
 }
 
-// إضافة تأثير وميض للنجوم
 const style = document.createElement("style");
 style.textContent = `
     @keyframes twinkle {
