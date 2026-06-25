@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LordKrax OS</title>
+<title>LordKrax OS v2</title>
 
 <style>
+/* نفس الـ styles الأساسية مع إضافات */
+
 body {
     margin: 0;
     font-family: monospace;
@@ -14,7 +16,6 @@ body {
     overflow: hidden;
 }
 
-/* LOGIN SCREEN */
 #login {
     position: fixed;
     width: 100%;
@@ -27,7 +28,7 @@ body {
     z-index: 999;
 }
 
-input {
+input, button {
     padding: 10px;
     margin: 5px;
     background: transparent;
@@ -35,15 +36,6 @@ input {
     color: #00f0ff;
 }
 
-button {
-    padding: 8px 12px;
-    background: transparent;
-    border: 1px solid #00f0ff;
-    color: #00f0ff;
-    cursor: pointer;
-}
-
-/* TOP BAR */
 .topbar {
     display: flex;
     justify-content: space-between;
@@ -51,44 +43,51 @@ button {
     border-bottom: 1px solid #00f0ff;
 }
 
-/* NAV */
 .nav {
     display: flex;
     gap: 10px;
 }
 
-/* PAGES */
 .page {
     display: none;
     padding: 20px;
+    height: 80vh;
+    overflow-y: auto;
 }
 
-/* ACTIVE PAGE */
 .active {
     display: block;
 }
 
-/* TERMINAL */
-#terminal {
-    border: 1px solid #00f0ff;
-    padding: 10px;
-    height: 200px;
-    overflow-y: auto;
-}
-
-/* CHAT */
-#chatBox {
+#terminal, #chatBox {
     border: 1px solid #00f0ff;
     height: 200px;
     overflow-y: auto;
     padding: 10px;
+    background: #0a0a0a;
 }
 
-/* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+}
+
+/* تحسين للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* تأثير وميض */
+.blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 </style>
 </head>
@@ -97,15 +96,16 @@ button {
 
 <!-- LOGIN -->
 <div id="login">
-    <h2>LOGIN OS</h2>
+    <h2>⚡ LOGIN OS</h2>
     <input id="user" placeholder="Username">
     <input id="pass" type="password" placeholder="Password">
     <button onclick="login()">Enter</button>
+    <p style="color:gray;font-size:12px;">(أي اسم وكلمة مرور)</p>
 </div>
 
 <!-- TOPBAR -->
 <div class="topbar">
-    <div>⚡ LORDKrax OS</div>
+    <div>⚡ LordKrax OS</div>
     <div class="nav">
         <button onclick="openPage('home')">Home</button>
         <button onclick="openPage('projects')">Projects</button>
@@ -116,134 +116,191 @@ button {
 
 <!-- HOME -->
 <div id="home" class="page active">
-
-<div class="grid">
-
-<div>
-<h3>Terminal</h3>
-<div id="terminal"></div>
-<input id="cmd" placeholder="type command..." onkeydown="cmdEnter(event)">
-</div>
-
-<div>
-<h3>Chat AI</h3>
-<div id="chatBox"></div>
-<input id="chatInput" placeholder="chat..." onkeydown="chatEnter(event)">
-</div>
-
-</div>
-
+    <div class="grid">
+        <div>
+            <h3>🖥️ Terminal</h3>
+            <div id="terminal"></div>
+            <input id="cmd" placeholder="اكتب أمراً..." onkeydown="cmdEnter(event)">
+        </div>
+        <div>
+            <h3>🤖 Chat AI</h3>
+            <div id="chatBox"></div>
+            <input id="chatInput" placeholder="اسألني..." onkeydown="chatEnter(event)">
+        </div>
+    </div>
 </div>
 
 <!-- PROJECTS -->
 <div id="projects" class="page">
-<h2>Projects</h2>
-<p>Discord Bots • Automation • FiveM</p>
+    <h2>📁 Projects</h2>
+    <ul>
+        <li>🤖 Discord Bots</li>
+        <li>⚙️ Automation Tools</li>
+        <li>🚗 FiveM Scripts</li>
+        <li>🌐 Web Apps</li>
+    </ul>
 </div>
 
 <!-- SETTINGS -->
 <div id="settings" class="page">
-<h2>Settings</h2>
-<button onclick="toggleSound()">Toggle Sound</button>
+    <h2>⚙️ Settings</h2>
+    <button onclick="toggleSound()">🔊 Toggle Sound</button>
+    <button onclick="clearStorage()">🗑️ Clear Data</button>
+    <p id="statusSound">Sound: ON</p>
 </div>
 
 <!-- ABOUT -->
 <div id="about" class="page">
-<h2>About</h2>
-<p>Developer OS Dashboard v1</p>
+    <h2>ℹ️ About</h2>
+    <p>LordKrax OS - Developer Dashboard v2</p>
+    <p>🛠️ Built with ❤️ using HTML, CSS, JS</p>
+    <p>📊 عدد الزيارات: <span id="visitCount"></span></p>
 </div>
 
 <script>
 
-/* LOGIN */
+/* ===== LOGIN ===== */
 function login(){
     document.getElementById("login").style.display = "none";
     playSound();
+    // عرض رسالة ترحيب في التيرمينال
+    terminal.innerHTML += "> Welcome to LordKrax OS 🚀<br>";
+    terminal.innerHTML += "> اكتب 'help' لمعرفة الأوامر<br>";
 }
 
-/* NAV */
+/* ===== NAVIGATION ===== */
 function openPage(id){
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     document.getElementById(id).classList.add("active");
     playSound();
 }
 
-/* TERMINAL */
+/* ===== TERMINAL ===== */
 let terminal = document.getElementById("terminal");
 
 function cmdEnter(e){
     if(e.key === "Enter"){
-        let val = e.target.value;
+        let val = e.target.value.trim();
+        if(!val) return;
+
         terminal.innerHTML += "> " + val + "<br>";
 
-        if(val === "help"){
-            terminal.innerHTML += "commands: help, time, clear<br>";
-        }
-
-        if(val === "time"){
-            terminal.innerHTML += new Date() + "<br>";
-        }
-
-        if(val === "clear"){
-            terminal.innerHTML = "";
+        // معالجة الأوامر
+        switch(val.toLowerCase()){
+            case "help":
+                terminal.innerHTML += "📌 الأوامر المتاحة: help, time, clear, echo, whoami, date, hello<br>";
+                break;
+            case "time":
+                terminal.innerHTML += "🕒 " + new Date().toLocaleTimeString() + "<br>";
+                break;
+            case "date":
+                terminal.innerHTML += "📅 " + new Date().toLocaleDateString() + "<br>";
+                break;
+            case "clear":
+                terminal.innerHTML = "";
+                break;
+            case "whoami":
+                terminal.innerHTML += "👤 أنت مستخدم LordKrax<br>";
+                break;
+            case "echo":
+                terminal.innerHTML += "🔊 LordKrax OS v2<br>";
+                break;
+            case "hello":
+                terminal.innerHTML += "👋 مرحباً بك في النظام!<br>";
+                break;
+            default:
+                terminal.innerHTML += "❌ أمر غير معروف. اكتب 'help'<br>";
         }
 
         playSound();
         e.target.value = "";
+        // تمرير للأسفل
+        terminal.scrollTop = terminal.scrollHeight;
     }
 }
 
-/* CHAT BOT (fake AI) */
+/* ===== CHAT BOT (محسّن) ===== */
 function chatEnter(e){
     if(e.key === "Enter"){
-        let val = e.target.value;
-        let box = document.getElementById("chatBox");
+        let val = e.target.value.trim();
+        if(!val) return;
 
-        box.innerHTML += "You: " + val + "<br>";
-        box.innerHTML += "Bot: " + fakeAI(val) + "<br>";
+        let box = document.getElementById("chatBox");
+        box.innerHTML += "🙋 You: " + val + "<br>";
+
+        // ردود ذكية أكثر
+        let reply = smartReply(val);
+        box.innerHTML += "🤖 Bot: " + reply + "<br>";
 
         playSound();
         e.target.value = "";
+        box.scrollTop = box.scrollHeight;
     }
 }
 
-function fakeAI(msg){
-    if(msg.includes("hi")) return "Hello 👋";
-    if(msg.includes("who")) return "I am OS Assistant";
-    return "I don't understand yet";
+function smartReply(msg){
+    msg = msg.toLowerCase();
+
+    if(msg.includes("hi") || msg.includes("hello") || msg.includes("مرحبا"))
+        return "👋 Hello! كيف يمكنني مساعدتك؟";
+
+    if(msg.includes("who") || msg.includes("what") || msg.includes("من"))
+        return "🤖 أنا مساعد LordKrax OS، مصمم لمساعدتك في مهامك.";
+
+    if(msg.includes("time") || msg.includes("وقت"))
+        return "🕒 الوقت الآن: " + new Date().toLocaleTimeString();
+
+    if(msg.includes("help") || msg.includes("مساعدة"))
+        return "💡 يمكنك سؤالي عن: الوقت، المشاريع، أو أي شيء!";
+
+    if(msg.includes("project") || msg.includes("مشروع"))
+        return "📁 لدي مشاريع في: Discord Bots, Automation, FiveM, Web Apps";
+
+    if(msg.includes("thank") || msg.includes("شكر"))
+        return "❤️ العفو! أنا هنا لخدمتك.";
+
+    return "🧠 لم أفهم تماماً. حاول إعادة الصياغة أو اسأل عن 'help'.";
 }
 
-/* SOUND SYSTEM */
+/* ===== SOUND SYSTEM (محسّن) ===== */
 let sound = true;
+
 function toggleSound(){
     sound = !sound;
+    document.getElementById("statusSound").innerText = "Sound: " + (sound ? "ON" : "OFF");
+    playSound();
 }
 
 function playSound(){
     if(!sound) return;
-    let audio = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
-    audio.play();
+    try {
+        let audio = new Audio("data:audio/wav;base64,U3RldmUgSm9icw=="); // صوت صامت
+        audio.volume = 0.1;
+        audio.play().catch(() => {});
+    } catch(e) {}
 }
 
-/* FIREBASE (READY TEMPLATE) */
-/*
-import { initializeApp } from "firebase/app";
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_APP",
-  projectId: "YOUR_ID",
-};
-const app = initializeApp(firebaseConfig);
-*/
+/* ===== STORAGE ===== */
+function clearStorage(){
+    localStorage.clear();
+    alert("🗑️ تم مسح جميع البيانات!");
+    location.reload();
+}
 
-/* ANALYTICS (simple demo) */
+/* ===== إحصائيات الزيارات ===== */
 let visits = localStorage.getItem("visits") || 0;
 visits++;
 localStorage.setItem("visits", visits);
+document.getElementById("visitCount").innerText = visits;
 
-console.log("Visits:", visits);
+/* ===== تشغيل تلقائي عند التحميل ===== */
+window.onload = function(){
+    // عرض رسالة في Terminal
+    if(document.getElementById("login").style.display !== "none"){
+        // مستخدم لم يسجل بعد
+    }
+};
 
 </script>
-
 </body>
 </html>
