@@ -11,128 +11,201 @@
 body {
     margin: 0;
     font-family: 'Orbitron', sans-serif;
-    background: radial-gradient(circle at top, #0f0f0f, #000);
+    background: #000;
     color: white;
-    text-align: center;
     overflow: hidden;
 }
 
-/* PROFILE IMAGE */
+/* LOADING SCREEN */
+#loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 999;
+}
+
+.loader {
+    border: 3px solid #222;
+    border-top: 3px solid #00f0ff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+
+/* BACKGROUND CANVAS */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* MAIN */
+.container {
+    text-align: center;
+    margin-top: 80px;
+    transition: transform 0.1s;
+}
+
 .pfp {
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    margin-top: 80px;
     border: 3px solid #00f0ff;
     box-shadow: 0 0 20px #00f0ff;
     object-fit: cover;
 }
 
-/* NAME */
 h1 {
-    margin-top: 20px;
-    font-size: 45px;
     text-shadow: 0 0 15px #00f0ff;
 }
 
-/* typing text */
-.typing {
-    font-size: 18px;
-    color: #aaa;
-    margin-top: 10px;
-    height: 25px;
-}
-
-/* buttons */
-.links {
-    margin-top: 30px;
-}
-
-a {
-    display: inline-block;
+/* BUTTONS */
+a, button {
     margin: 10px;
-    padding: 12px 25px;
+    padding: 12px 20px;
     border: 1px solid #00f0ff;
+    background: transparent;
     color: white;
-    text-decoration: none;
+    cursor: pointer;
     border-radius: 8px;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
-a:hover {
+a:hover, button:hover {
     background: #00f0ff;
     color: black;
     box-shadow: 0 0 20px #00f0ff;
 }
 
-/* music button */
-#musicBtn {
-    margin-top: 20px;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    background: #111;
-    color: white;
-    border: 1px solid #ff00ff;
-    border-radius: 8px;
+/* typing */
+.typing {
+    color: #aaa;
+    height: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- PFP FIXED -->
-<img class="pfp" src="https://github.com/LordKrax.png" alt="pfp">
-
-<h1>LordKrax</h1>
-
-<div class="typing" id="typing"></div>
-
-<div class="links">
-    <a href="https://github.com/LordKrax" target="_blank">GitHub</a>
-    <a href="https://discord.com/users/752438182343344128" target="_blank">Discord</a>
-    <a href="#">Projects</a>
+<!-- LOADING -->
+<div id="loading">
+    <div class="loader"></div>
+    <p>Loading...</p>
 </div>
 
-<!-- music -->
-<button id="musicBtn">▶ Play Music</button>
+<!-- BACKGROUND -->
+<canvas id="bg"></canvas>
+
+<!-- CONTENT -->
+<div class="container" id="content">
+    <img class="pfp" src="https://github.com/LordKrax.png">
+
+    <h1>LordKrax</h1>
+    <div class="typing" id="typing"></div>
+
+    <div>
+        <a onclick="clickSound()" href="https://github.com/LordKrax">GitHub</a>
+        <a onclick="clickSound()" href="https://discord.com/users/752438182343344128">Discord</a>
+        <button onclick="toggleMusic(); clickSound()">Music</button>
+    </div>
+</div>
 
 <audio id="music" loop>
-    <!-- working test music -->
-    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kai_Engel/Impulses/Kai_Engel_-_07_-_Moonlight_Reprise.mp3" type="audio/mp3">
+    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kai_Engel/Impulses/Kai_Engel_-_07_-_Moonlight_Reprise.mp3">
+</audio>
+
+<audio id="click">
+    <source src="https://www.myinstants.com/media/sounds/mouse-click.mp3">
 </audio>
 
 <script>
-// typing effect
+// LOADING SCREEN
+setTimeout(() => {
+    document.getElementById("loading").style.display = "none";
+}, 1500);
+
+// TYPING
 const text = "Discord Bots • Automation • FiveM Developer";
 let i = 0;
-
-function typing() {
+function type() {
     if (i < text.length) {
-        document.getElementById("typing").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typing, 60);
+        document.getElementById("typing").innerHTML += text[i++];
+        setTimeout(type, 50);
     }
 }
-typing();
+type();
 
-// music control
-const music = document.getElementById("music");
-const btn = document.getElementById("musicBtn");
+// MUSIC
+let music = document.getElementById("music");
+function toggleMusic() {
+    if (music.paused) music.play();
+    else music.pause();
+}
 
-btn.onclick = async () => {
-    try {
-        if (music.paused) {
-            await music.play();
-            btn.innerText = "⏸ Pause Music";
-        } else {
-            music.pause();
-            btn.innerText = "▶ Play Music";
-        }
-    } catch (e) {
-        alert("اضغط مرة ثانية لتشغيل الموسيقى");
+// CLICK SOUND
+function clickSound() {
+    document.getElementById("click").currentTime = 0;
+    document.getElementById("click").play();
+}
+
+// 3D EFFECT
+document.addEventListener("mousemove", (e) => {
+    let x = (window.innerWidth / 2 - e.pageX) / 25;
+    let y = (window.innerHeight / 2 - e.pageY) / 25;
+    document.querySelector(".container").style.transform =
+        `rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+// PARTICLES BACKGROUND
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 80; i++) {
+    particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2,
+        dx: (Math.random() - 0.5),
+        dy: (Math.random() - 0.5)
+    });
+}
+
+function animate() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    for (let p of particles) {
+        p.x += p.dx;
+        p.y += p.dy;
+
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+
+        ctx.fillStyle = "#00f0ff";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
     }
-};
+
+    requestAnimationFrame(animate);
+}
+animate();
 </script>
 
 </body>
