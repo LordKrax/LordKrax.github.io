@@ -17,30 +17,34 @@ body {
     overflow: hidden;
 }
 
-/* glow animation */
-@keyframes glow {
-    0% { text-shadow: 0 0 10px #00f0ff; }
-    50% { text-shadow: 0 0 25px #ff00ff; }
-    100% { text-shadow: 0 0 10px #00f0ff; }
+/* PROFILE IMAGE */
+.pfp {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    margin-top: 80px;
+    border: 3px solid #00f0ff;
+    box-shadow: 0 0 20px #00f0ff;
 }
 
-.container {
-    margin-top: 120px;
-}
-
+/* NAME */
 h1 {
-    font-size: 50px;
-    animation: glow 3s infinite;
+    margin-top: 20px;
+    font-size: 45px;
+    text-shadow: 0 0 15px #00f0ff;
 }
 
-p {
+/* typing text */
+.typing {
+    font-size: 18px;
     color: #aaa;
-    margin-top: -10px;
+    margin-top: 10px;
+    height: 25px;
 }
 
 /* buttons */
 .links {
-    margin-top: 40px;
+    margin-top: 30px;
 }
 
 a {
@@ -60,46 +64,70 @@ a:hover {
     box-shadow: 0 0 20px #00f0ff;
 }
 
-/* floating particles */
-.particle {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: #00f0ff;
-    border-radius: 50%;
-    animation: float 10s infinite linear;
-}
-
-@keyframes float {
-    from { transform: translateY(100vh); opacity: 1; }
-    to { transform: translateY(-10vh); opacity: 0; }
+/* music button */
+#musicBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    background: #111;
+    color: white;
+    border: 1px solid #ff00ff;
+    border-radius: 8px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- particles -->
-<script>
-for (let i = 0; i < 30; i++) {
-    let p = document.createElement("div");
-    p.className = "particle";
-    p.style.left = Math.random() * 100 + "vw";
-    p.style.animationDuration = (5 + Math.random() * 10) + "s";
-    document.body.appendChild(p);
-}
-</script>
+<!-- PFP from GitHub -->
+<img class="pfp" src="https://github.com/LordKrax" alt="pfp">
 
-<div class="container">
-    <h1>LordKrax</h1>
-    <p>Discord Bot Developer | Automation | FiveM Developer</p>
+<h1>LordKrax</h1>
 
-    <div class="links">
-        <a href="https://github.com/LordKrax" target="_blank">GitHub</a>
-        <a href="https://discord.com/users/752438182343344128" target="_blank">Discord</a>
-        <a href="#">Projects</a>
-    </div>
+<div class="typing" id="typing"></div>
+
+<div class="links">
+    <a href="https://github.com/LordKrax" target="_blank">GitHub</a>
+    <a href="https://discord.com/users/752438182343344128" target="_blank">Discord</a>
+    <a href="#">Projects</a>
 </div>
+
+<!-- music -->
+<button id="musicBtn">▶ Play Music</button>
+
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/16/audio_c8b6c3b8c6.mp3?filename=cyberpunk-moonlight-ambient-114199.mp3" type="audio/mp3">
+</audio>
+
+<script>
+// typing effect
+const text = "Discord Bots • Automation • FiveM Developer";
+let i = 0;
+
+function typing() {
+    if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typing, 60);
+    }
+}
+typing();
+
+// music control
+const music = document.getElementById("music");
+const btn = document.getElementById("musicBtn");
+
+btn.onclick = () => {
+    if (music.paused) {
+        music.play();
+        btn.innerText = "⏸ Pause Music";
+    } else {
+        music.pause();
+        btn.innerText = "▶ Play Music";
+    }
+};
+</script>
 
 </body>
 </html>
