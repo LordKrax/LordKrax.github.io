@@ -28,7 +28,6 @@ body {
     position: relative;
 }
 
-/* ✅ خلفية متحركة سوداء */
 body::before {
     content: '';
     position: absolute;
@@ -43,7 +42,6 @@ body::before {
     z-index: 0;
 }
 
-/* ✅ الصورة الرمزية */
 .pfp {
     width: 150px;
     height: 150px;
@@ -67,7 +65,6 @@ body::before {
     100% { box-shadow: 0 0 40px #1ecea7, 0 0 80px rgba(30, 206, 167, 0.4); }
 }
 
-/* ✅ الاسم */
 h1 {
     margin-top: 25px;
     font-size: 48px;
@@ -79,7 +76,6 @@ h1 {
     z-index: 1;
 }
 
-/* ✅ النص الترحيبي المتغير */
 .welcome-text {
     font-size: 16px;
     color: #1ecea7;
@@ -103,7 +99,6 @@ h1 {
     50% { opacity: 0; }
 }
 
-/* ✅ النص المتغير تحت الترحيب */
 .typing {
     font-size: 18px;
     color: #1ecea7;
@@ -120,7 +115,6 @@ h1 {
     animation: blink 0.8s infinite;
 }
 
-/* ✅ الساعة الرقمية */
 .clock {
     font-size: 20px;
     color: #1ecea7;
@@ -132,7 +126,6 @@ h1 {
     font-family: 'Orbitron', monospace;
 }
 
-/* ✅ الأزرار */
 .links {
     margin-top: 25px;
     display: flex;
@@ -182,7 +175,6 @@ h1 {
     transform: translateY(-3px);
 }
 
-/* ✅ زر الموسيقى */
 #musicBtn {
     margin-top: 20px;
     padding: 12px 35px;
@@ -207,7 +199,6 @@ h1 {
     transform: translateY(-3px);
 }
 
-/* ✅ عداد الزوار */
 .visitor {
     margin-top: 20px;
     font-size: 12px;
@@ -312,10 +303,11 @@ h1 {
 <!-- ✅ Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
 <script>
 // ============================================
-// FIREBASE CONFIG (بياناتك الحقيقية ✅)
+// FIREBASE CONFIG
 // ============================================
 const firebaseConfig = {
   apiKey: "AIzaSyBo9GTqvu0Mvv4DK3WejBEXoGqo0Z6Dw3M",
@@ -327,44 +319,37 @@ const firebaseConfig = {
   measurementId: "G-DT8VXN8JZZ"
 };
 
-// تهيئة Firebase
-try {
-    firebase.initializeApp(firebaseConfig);
-    console.log("✅ Firebase initialized successfully!");
-} catch (error) {
-    console.error("❌ Firebase initialization error:", error);
-}
-
+firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+const auth = firebase.auth();
+
+console.log("✅ Firebase initialized!");
 
 // ============================================
-// VISITOR COUNTER (عداد الزوار العام)
+// AUTHENTICATION (تسجيل دخول تلقائي)
+// ============================================
+function initVisitorCounter() {
+    getVisitorCount();
+    updateVisitorCount();
+}
+
+// محاولة تسجيل الدخول بدون حساب
+auth.signInAnonymously()
+    .then(() => {
+        console.log("✅ تم تسجيل الدخول بنجاح!");
+        initVisitorCounter();
+    })
+    .catch((error) => {
+        console.warn("⚠️ فشل تسجيل الدخول، لكن العداد سيعمل جزئياً");
+        console.error("❌ خطأ:", error);
+        // حتى لو فشل، حاول تشغيل العداد
+        initVisitorCounter();
+    });
+
+// ============================================
+// VISITOR COUNTER
 // ============================================
 const visitorRef = database.ref('visitors');
-
-function updateVisitorCount() {
-    console.log("🔄 جاري تحديث الزيارات...");
-    visitorRef.once('value')
-        .then((snapshot) => {
-            let count = snapshot.val() || 0;
-            count = parseInt(count) + 1;
-            console.log("📊 العدد الجديد:", count);
-            
-            visitorRef.set(count)
-                .then(() => {
-                    document.getElementById('visitorCount').textContent = count;
-                    console.log('✅ تم تحديث الزيارات:', count);
-                })
-                .catch((error) => {
-                    console.error('❌ خطأ في حفظ الزيارات:', error);
-                    alert('❌ خطأ في حفظ الزيارات: ' + error.message);
-                });
-        })
-        .catch((error) => {
-            console.error('❌ خطأ في قراءة الزيارات:', error);
-            alert('❌ خطأ في قراءة الزيارات: ' + error.message);
-        });
-}
 
 function getVisitorCount() {
     visitorRef.on('value', (snapshot) => {
@@ -372,16 +357,28 @@ function getVisitorCount() {
         document.getElementById('visitorCount').textContent = count;
         console.log('📊 عدد الزيارات الحالي:', count);
     }, (error) => {
-        console.error('❌ خطأ في الاستماع للزيارات:', error);
+        console.error('❌ خطأ في القراءة:', error);
     });
 }
 
-// تشغيل العداد
-getVisitorCount();
-updateVisitorCount();
+function updateVisitorCount() {
+    console.log("🔄 جاري تحديث الزيارات...");
+    
+    visitorRef.transaction((currentCount) => {
+        return (currentCount || 0) + 1;
+    }, (error, committed, snapshot) => {
+        if (error) {
+            console.error('❌ خطأ في تحديث الزيارات:', error);
+        } else if (committed) {
+            const newCount = snapshot.val();
+            document.getElementById('visitorCount').textContent = newCount;
+            console.log('✅ تم تحديث الزيارات:', newCount);
+        }
+    });
+}
 
 // ============================================
-// باقي الكود
+// باقي الكود (نفسه)
 // ============================================
 const typingSound = document.getElementById("typingSound");
 
@@ -611,10 +608,10 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-console.log("%c⚡ LordKrax OS v4.0", "font-size:20px; color:#1ecea7; font-weight:bold;");
+console.log("%c⚡ LordKrax OS v4.0 🔒", "font-size:20px; color:#1ecea7; font-weight:bold;");
 console.log("%cDeveloped with ❤️ by LordKrax", "font-size:14px; color:#1ecea7;");
 console.log("%c🔗 GitHub: https://github.com/LordKrax", "font-size:12px; color:#1ecea7;");
-console.log("%c👁️ Visitor counter with Firebase!", "font-size:12px; color:#1ecea7;");
+console.log("%c👁️ Visitor counter with Firebase + Authentication!", "font-size:12px; color:#1ecea7;");
 
 document.querySelector(".pfp").onerror = function() {
     this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Ccircle cx='75' cy='75' r='70' fill='%231ecea7'/%3E%3Ctext x='75' y='85' font-size='40' text-anchor='middle' fill='black' font-family='monospace'%3ELK%3C/text%3E%3C/svg%3E";
